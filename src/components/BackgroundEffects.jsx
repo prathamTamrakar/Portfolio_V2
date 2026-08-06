@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { useMousePosition } from "../hooks/useMousePosition";
 
 export default function BackgroundEffects() {
-  const { x, y } = useMousePosition();
+  const spotlightRef = useRef(null);
+  const rafId = useRef(null);
+
+  useEffect(() => {
+    const handleMouseMove = (ev) => {
+      if (rafId.current) return;
+      rafId.current = requestAnimationFrame(() => {
+        if (spotlightRef.current) {
+          spotlightRef.current.style.background = `radial-gradient(800px circle at ${ev.clientX}px ${ev.clientY}px, rgba(139, 92, 246, 0.08), rgba(34, 211, 238, 0.06) 35%, transparent 70%)`;
+        }
+        rafId.current = null;
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 -z-50 overflow-hidden bg-background select-none pointer-events-none">
@@ -16,12 +34,10 @@ export default function BackgroundEffects() {
       {/* Global Vignette (Dark borders) */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,#09090B_95%)] pointer-events-none" />
 
-      {/* Mouse Spotlight effect (Desktop only) */}
+      {/* Mouse Spotlight effect — updated via direct DOM ref, no React re-renders */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-300 hidden md:block"
-        style={{
-          background: `radial-gradient(800px circle at ${x}px ${y}px, rgba(139, 92, 246, 0.08), rgba(34, 211, 238, 0.06) 35%, transparent 70%)`,
-        }}
+        ref={spotlightRef}
+        className="absolute inset-0 pointer-events-none opacity-40 hidden md:block"
       />
 
       {/* Floating Ambient Mesh Blob 1 (Cyan/Primary) */}
@@ -36,6 +52,7 @@ export default function BackgroundEffects() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
+        style={{ willChange: "transform" }}
         className="absolute top-1/4 left-1/4 w-[35rem] h-[35rem] rounded-full bg-primary/10 blur-[130px] pointer-events-none"
       />
 
@@ -51,6 +68,7 @@ export default function BackgroundEffects() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
+        style={{ willChange: "transform" }}
         className="absolute bottom-1/4 right-1/4 w-[40rem] h-[40rem] rounded-full bg-secondary/10 blur-[150px] pointer-events-none"
       />
 
@@ -66,6 +84,7 @@ export default function BackgroundEffects() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
+        style={{ willChange: "transform" }}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[25rem] h-[25rem] rounded-full bg-accent/3 blur-[120px] pointer-events-none"
       />
     </div>

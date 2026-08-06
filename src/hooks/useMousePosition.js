@@ -1,21 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /**
  * Custom hook to track the user's cursor position.
- * Useful for mouse-parallax, spotlights, and floating ambient effects.
+ * Throttled via requestAnimationFrame to avoid flooding the main thread.
  */
 export function useMousePosition() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const rafId = useRef(null);
 
   useEffect(() => {
     const updateMousePosition = (ev) => {
-      setMousePosition({ x: ev.clientX, y: ev.clientY });
+      if (rafId.current) return; // skip if a frame is already queued
+      rafId.current = requestAnimationFrame(() => {
+        setMousePosition({ x: ev.clientX, y: ev.clientY });
+        rafId.current = null;
+      });
     };
 
-    window.addEventListener("mousemove", updateMousePosition);
+    window.addEventListener("mousemove", updateMousePosition, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", updateMousePosition);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
     };
   }, []);
 
