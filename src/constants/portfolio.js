@@ -9,7 +9,7 @@ export const DEVELOPER_INFO = {
   linkedin: "https://linkedin.com/in/prathamtamrakar",
   website: "https://prathamtamrakar.vercel.app",
   location: "Jabalpur, Madhya Pradesh, India",
-  resumeUrl: "#", // Add link to hosted resume PDF
+  resumeUrl: "https://prathamtamrakar.vercel.app/Pratham_Tamrakar_Resume.pdf",
 };
 
 export const HERO_CODE = `{

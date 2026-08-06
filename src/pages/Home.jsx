@@ -89,7 +89,7 @@ export default function Home() {
               </a>
 
               <a
-                href="/Pratham_Tamrakar_Resume.pdf"
+                href={DEVELOPER_INFO.resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 py-3 px-6 rounded-full border border-white/10 hover:border-white/20 bg-surface/50 text-text-primary font-semibold text-sm hover:scale-[1.02] active:scale-95 transition-all select-none cursor-pointer"

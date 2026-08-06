@@ -109,7 +109,7 @@ export default function Navbar() {
           {/* CTA / Resume Button (Desktop) */}
           <div className="hidden md:block">
             <a
-              href="/Pratham_Tamrakar_Resume.pdf"
+              href={DEVELOPER_INFO.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="relative inline-flex items-center justify-center px-4 py-2 text-xs font-semibold tracking-wider uppercase rounded-full border transition-all duration-300 group overflow-hidden bg-surface border-border-custom text-text-primary hover:border-primary/50"
@@ -165,7 +165,7 @@ export default function Navbar() {
               })}
               <hr className="border-white/5 my-1" />
               <a
-                href="/Pratham_Tamrakar_Resume.pdf"
+                href={DEVELOPER_INFO.resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}
